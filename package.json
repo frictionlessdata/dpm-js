@@ -1,0 +1,19 @@
+{ 
+    "name": "datapm"
+  , "version": "0.0.1"
+  , "description": "Data Package Manager"
+  , "author": "Rufus Pollock <rufus.pollock@okfn.org> (http://rufuspollock.org)"
+  , "keywords" : [ "data package", "data", "npm"]
+  , "repository": {
+      "type" : "git"
+    , "url" : "https://github.com/okfn/dpm"
+  }
+  , "bin": {
+    "dpm": "./bin/dpm.js"
+  }
+  , "dependencies": { 
+      "optimist": "0.3.4"
+    , "npm": "1.3.14"
+  }
+  , "main" : "lib/dpm.js"
+}
