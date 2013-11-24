@@ -3,10 +3,14 @@ var dpm = require('../lib/dpm')
   , optimist = require('optimist')
   ;
 
-var usage = 'Usage: dpm OPTIONS COMMAND ...';
-usage += '\n\nCOMMANDs:\n\n'
-usage += '  install\n'
-usage += '  publish'
+var usage = [
+  'Usage: dpm OPTIONS COMMAND ...',
+  '',
+  'COMMANDs:',
+  '  init',
+  '  install',
+  '  publish'
+  ].join('\n');
 
 var argv = optimist
   .usage(usage)

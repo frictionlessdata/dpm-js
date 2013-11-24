@@ -14,6 +14,7 @@
   , "dependencies": { 
       "optimist": "0.3.4"
     , "npm": "1.3.14"
+    , "init-package-json": ""
   }
   , "main" : "lib/dpm.js"
 }
