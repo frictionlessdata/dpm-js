@@ -20,10 +20,11 @@ if (args.length < 1) {
   return;
 }
 
-dpm(args[0], args.slice(1, args.length), function(err, resp) {
+dpm().run(args[0], args.slice(1, args.length), function(err, resp) {
   if (err) {
     console.error('There was an error: ' + err);
   } else {
     console.log(resp)
   }
-})
+});
+
