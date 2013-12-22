@@ -4,9 +4,13 @@ var dpm = require('../lib/dpm')
   ;
 
 describe('basics', function(){
-  it('findDataFiles OK', function() {
+  it('findDataFiles CSV OK', function() {
     var out = util.findDataFiles('test/data/dp1');
     assert.deepEqual(['data.csv'], out);
+  });
+  it('findDataFiles GeoJSON OK', function() {
+    var out = util.findDataFiles('test/data/dp2');
+    assert.deepEqual(['data.geojson'], out);
   });
   it('createResourceEntry OK', function(done) {
     var fp = 'test/data/dp1/data.csv';
@@ -31,6 +35,20 @@ describe('basics', function(){
             }
           ]
         }
+      }
+      assert.deepEqual(JSON.stringify(out, null, 2), JSON.stringify(exp, null, 2));
+      done();
+    });
+  });
+  it('createResourceEntry GeoJSON OK', function(done) {
+    var fp = 'test/data/dp2/data.geojson';
+    util.createResourceEntry(fp, function(err, out) {
+      var exp = {
+        name: 'data',
+        path: fp,
+        format: 'geojson',
+        mediatype: 'application/json',
+        bytes: 4
       }
       assert.deepEqual(JSON.stringify(out, null, 2), JSON.stringify(exp, null, 2));
       done();
