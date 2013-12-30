@@ -1,0 +1,359 @@
+#!/usr/bin/env node
+
+var path = require('path')
+  , datapackage = require('datapackage-json')
+  , util = require('util')
+  , isUrl = require('is-url')
+  , request = require('request')
+  , fs = require('fs')
+  , Dpm = require('..')
+  , optimist = require('optimist')
+  , read = require('read')
+  , async = require('async')
+  , rimraf = require('rimraf')
+  , validate = require('npm-user-validate')
+  , semver = require('semver')
+  , split = require('split')
+  , querystring = require('querystring')
+  , tree = require('../lib/tree')
+  , readdirpSync = require('fs-readdir-recursive')
+  , os = require('os')
+  , colors = require('colors');
+
+var argv = optimist
+  .usage(
+    [
+      'Usage: dpm <command> [options] where command is:',
+      '  - init [globs] [urls] [-d, --defaults] Interactively create a package.json file and add the files listed as globs (*.csv ... and urls) as resources',
+      '  - cat       <datapackage name>[@<version>]',
+      '    Display package.json on stdout. If @<version> is not specified, the latest version is returned.'.grey,
+      '  - get      <datapackage name>[@<version>] [-f, --force] [-c, --cache]',
+      '    Download a data package into a directory (named after the data package name).'.grey,
+      '  - clone    <datapackage name>[@<version>] [-f, --force]',
+      '    Download a data package into a directory (named after the data package name) reproducing the directory structure present at publication time (including any files or folder not listed as resources (e.g scripts/ ...)).'.grey,
+      '  - install   <datapackage name 1>[@<version>] <datapackage name 2>[@<version>] ... [-c, --cache] [-s, --save]',
+      '    Install a list of data packages, and any data packages that they depends on as dependencies of your current project (i.e in a directory named "data_modules")'.grey,
+      '  - publish',
+      '    Publish the data package of the current working directory into the registry'.grey,
+      '  - unpublish <datapackage name>[@<version>]',
+      '    Unpublish a datapackage from the registry. If no version is specified, all the versions will be removed'.grey,
+      '  - adduser',
+      '    Register a user'.grey,
+      '  - owner <subcommand> where subcommand is:',
+      '    - ls  <datapackage name>',
+      '      List all the maintainers of the data package'.grey,
+      '    - add <user> <datapackage name>',
+      '      Add a user to the data package maintainers'.grey,
+      '    - rm  <user> <datapackage name>[@<version>]',
+      '      Remove a user from the data package maintainers'.grey,
+      '  - search [search terms]',
+      '    Search data packages by keywords'.grey
+    ].join(os.EOL)
+  )
+  .alias('f', 'force').describe('f', 'just do it')
+  .alias('d', 'defaults').describe('d', ' bypass the promzard prompt')
+  .alias('s', 'save').describe('s', 'data packages will appear in your dataDependencies')
+  .alias('c', 'cache').describe('c', 'store the resources content on the disk in a data/ directory')
+  .alias('h', 'help').describe('h', 'print usage')
+  .alias('v', 'version').describe('v', 'print version number')
+  .argv;
+
+if(argv.h){
+  console.log(optimist.help());
+  process.exit(0);
+}
+
+if(argv.v){
+  console.log(require('../package.json').version);
+  process.exit(0);
+}
+
+//if cloudant: use sha:true
+var dpm = new Dpm(require('rc')('dpm', {protocol: 'https', port: 443, hostname: 'registry.standardanalytics.io', strictSSL: false, sha:true}), process.cwd());
+
+if(argv._[0] !== 'cat'){
+  dpm.on('log', console.log);
+}
+
+if (argv._[0] === 'init') {
+
+  (function(){
+
+    var pkg = datapackage(dpm.root);
+
+    pkg.init({defaults: argv.defaults}, function(err, dpkg){
+      var inputs = argv._.slice(1);
+      dpm.paths2resources(inputs.filter(function(x){return !isUrl(x);}), function(err, resourcesFromPaths){
+        if(err) _fail(err);
+        dpm.urls2resources(inputs.filter(function(x){return isUrl(x);}), function(err, resourcesFromUrls){
+          if(err) _fail(err);
+          dpkg = dpm.addResources(dpkg, resourcesFromPaths.concat(resourcesFromUrls));
+
+          console.log(util.inspect(dpkg, {depth:null}));
+          pkg.write(dpkg);
+        });
+      });
+
+    });
+    
+  })();
+
+} else if (argv._[0] === 'cat') {
+  
+  (function(){
+    var dpkgId = argv._[1];
+    if(!dpkgId) _fail(new Error('invalid usage'));
+    dpm.cat(dpkgId, function(err, dpkg){
+      if(err) return _fail(err);
+      console.log(JSON.stringify(dpkg));
+    });
+  })();  
+
+} else if(argv._[0] === 'get'){
+
+  (function(){
+    var dpkgId = argv._[1];
+    if(!dpkgId) _fail(new Error('invalid usage'));    
+
+    dpm.get(dpkgId, {cache: argv.cache, force: argv.force}, function(err, dpkg){
+      if(err) _fail(err);
+      console.log(tree.dpkg(dpkg));
+    });
+
+  })();
+
+} else if(argv._[0] === 'clone'){
+
+  (function(){
+    var dpkgId = argv._[1];
+    if(!dpkgId) _fail(new Error('invalid usage'));
+
+    dpm.clone(dpkgId, {force: argv.force}, function(err, dpkg){
+      if(err) _fail(err);
+
+      var paths = readdirpSync(dpm.root)
+        .filter(function(p){
+          return p.split(path.sep)[0] === dpkg.name;
+        })
+        .map(function(p){return '.' + path.sep + p;});
+      
+      if(paths.length){
+        console.log(tree.clone(paths));
+      }
+    });
+
+  })();
+
+} else if(argv._[0] === 'install'){
+
+  (function(){
+    var dpkgIds = argv._.slice(1);
+    var dpkg;
+    if(!dpkgIds.length || argv.save){ //get deps for a package.json
+      try{
+        dpkg = JSON.parse(fs.readFileSync(path.join(dpm.root, 'package.json')));
+      } catch(e){
+        _fail(new Error('could not load '+ path.join(dpm.root, 'package.json')));
+      }
+    }
+
+    if(!dpkgIds.length){
+      dpm.resolveDeps(dpkg.dataDependencies, function(err, dpkgIds){
+        if(err) _fail(err);
+        next(dpkgIds);
+      });
+    } else {
+      next(dpkgIds);
+    }
+
+    function next(dpkgIds){
+      dpm.install(dpkgIds, {cache: argv.cache, force: argv.force}, function(err, dpkgs){
+        if(err) _fail(err);
+        if(argv.save){
+          dpkg.dataDependencies = dpkg.dataDependencies || {};
+          dpkgs.forEach(function(x){
+            dpkg.dataDependencies[x.name] =  x.version;
+          });
+          fs.writeFileSync(path.join(dpm.root, 'package.json'), JSON.stringify(dpkg, null, 2));
+        }
+        console.log(tree.deps(dpkgs));
+      });
+    };
+
+  })();
+
+} else if (argv._[0] === 'publish') {
+  if(!fs.existsSync(path.resolve(dpm.root, 'package.json'))){
+    _fail(new Error('no package.json file in '+ dpm.root));
+  };
+
+  dpm.publish(function(err, id){
+    if(err) return _fail(err);
+    console.log('+ ' + id);
+  });
+
+} else if (argv._[0] === 'unpublish') {
+
+  (function(){
+    var dpkgId = argv._[1];
+    if(!dpkgId) _fail(new Error('invalid usage'));
+    dpm.unpublish(dpkgId, _fail);
+  })();
+  
+} else if (argv._[0] === 'adduser') {
+
+  (function(){
+
+    function readStuff(stuff, cb){
+      var options = {prompt: stuff + ': '};
+      var vname;
+      if(stuff === 'password'){
+        vname = 'pw';
+        options.silent = true;
+        options.replace = '*';
+      } else {
+        vname = stuff;
+      }
+      read(options, function(err, result){
+        if(err || !result) {
+          console.error((err && err.message) || (prompt + ' cannot be empty'));
+          return readStuff(stuff, cb);
+        }
+        err = validate[vname](result);
+        if(err) {
+          console.error(err.message);
+          return readStuff(stuff, cb);
+        }
+        return cb(null, result);
+      });
+    };
+
+    async.series({
+      name: function(cb){
+        readStuff('username', cb);
+      },
+      email: function(cb){
+        readStuff('email', cb);
+      },
+      password: function(cb){
+        readStuff('password', cb);
+      }
+    }, function (err, prompted){
+      if(err) _fail(err);
+
+      for(var key in prompted){
+        dpm.rc[key] = prompted[key];
+      }
+
+      var $HOME = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+      try {
+        fs.writeFileSync(path.resolve($HOME, '.dpmrc'), JSON.stringify(dpm.rc, function(key, value){
+          if(key.charAt(0) === '_' || key.charAt(0) === '$' || key === 'config'){
+            return undefined;
+          }
+          return value;
+        }, 2));
+      } catch (e){
+        _fail(e);
+      }
+      dpm.adduser(_fail);
+    });
+
+  })();
+
+} else if (argv._[0] === 'owner'){
+
+  (function(){
+    var action = argv._[1];
+    if(!action) _fail(new Error('invalid usage'));
+    var dpkgname;
+
+    if(action === 'add'){
+      var granted = argv._[2];
+      if(!granted) _fail(new Error('invalid usage'));
+
+      dpkgName = argv._[3];
+      if(!dpkgName) _fail(new Error('invalid usage'));
+
+      dpm.addOwner({username: granted, dpkgName: dpkgName}, _fail);
+
+    } else if (action === 'ls'){
+
+      dpkgName = argv._[2];
+      if(!dpkgName) _fail(new Error('invalid usage'));
+      
+      dpm.lsOwner(dpkgName, function(err, maintainers){
+        if(err) _fail(err);
+        if(!Array.isArray(maintainers)) _fail(new Error('no maintainers'));
+        maintainers.forEach(function(m){
+          console.log(m.name, m.email);
+        });
+      });
+
+    } else if (action === 'rm') {
+
+      var banned = argv._[2];
+      if(!banned) _fail(new Error('invalid usage'));
+
+      dpkgName = argv._[3];
+      if(!dpkgName) _fail(new Error('invalid usage'));
+
+      dpm.rmOwner({username: banned, dpkgName: dpkgName}, _fail);
+
+    } else {
+      _fail(new Error('invalid usage'));
+    }
+  })();
+
+
+} else if (argv._[0] === 'search'){
+
+  (function(){
+    var keys = argv._.slice(1);
+    var qs = (keys.length) ?  '?keys=' + JSON.stringify(keys): '';
+
+    var $HOME = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+
+    var rpath = '/search' + qs
+    var rurl = dpm.url(rpath);
+    dpm.logHttp('GET', rurl);
+    request(dpm.rOpts(rurl)).on('response', function(res){
+      dpm.logHttp(res.statusCode, rurl);
+      if(res.statusCode === 404){
+        res.setEncoding('utf8');
+        var data = '';
+        res.on('data', function(chunk){data += chunk});
+        res.on('end', function(){
+          _fail(new Error(JSON.parse(data).error));
+        });
+      } else {
+        res
+          .pipe(split(function(row){
+            if(row) {
+              row = JSON.parse(row);
+              if('error' in row) return row.error + os.EOL; //no results;
+              return row.value._id.underline + ' [' + row.key.cyan + ']: ' + row.value.description + os.EOL;
+            }
+          }))
+          .pipe(process.stdout);    
+      }})
+      .on('error', _fail)
+      .end();
+  })();
+  
+} else if (argv._[0] === 'help'){
+
+  console.log(optimist.help());
+
+} else {
+
+  _fail(new Error('invalid command'));
+
+};
+
+function _fail(err){
+  if(err){
+    console.error('dpm'.grey +  ' ERR! '.red + err.message + (('code' in err) ? ' (' + err.code + ')': ''));
+    process.exit(1);
+  }
+};

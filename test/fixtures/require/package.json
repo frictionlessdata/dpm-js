@@ -1,0 +1,16 @@
+{
+  "name": "req",
+  "description": "a test for require",
+  "dataDependencies": {
+    "mydpkg": "0.0.0"
+  },
+  "version": "0.0.0",
+  "keywords": ["test", "datapackage"],
+
+  "resources": [
+    {
+      "name": "azerty",
+      "require": {"datapackage": "mydpkg", "resource": "csv1", "fields": ["a"]}
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "name": "mydpkg",
+  "description": "my datapackage",
+  "version": "0.0.0",
+  "keywords": ["test", "datapackage"],
+
+  "resources": [
+    {
+      "name": "inline",
+      "schema": {
+        "fields": [
+          {"name": "a", "type": "string"},
+          {"name": "b", "type": "integer"},
+          {"name": "c", "type": "number"}
+        ]
+      },
+      "data": [
+        {"a": "a", "b": 1, "c": 1.2},
+        {"a": "x", "b": 2, "c": 2.3},
+        {"a": "y", "b": 3, "c": 3.4}
+      ]
+    },
+    {
+      "name": "csv1",
+      "format": "csv",
+      "schema": {
+        "fields": [
+          {"name": "a", "type": "integer"},
+          {"name": "b", "type": "integer"}
+        ]
+      },
+      "path": "x1.csv"
+    },
+    {
+      "name": "csv2",
+      "format": "csv",
+      "schema": {
+        "fields": [
+          {"name": "c", "type": "integer"},
+          {"name": "d", "type": "integer"}
+        ]
+      },
+      "path": "x2.csv"
+    }
+  ]
+}
