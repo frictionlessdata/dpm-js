@@ -1,11 +1,11 @@
 dpm
 ===
 
-Like [npm](https://npmjs.org/) but for
-[data packages](http://dataprotocols.org/data-packages/)!
+[Data package][dp] library and data package manager (dpm) command line tool.
 
-[![NPM](https://nodei.co/npm/dpm2.png)](https://nodei.co/npm/dpm2/)
+[dp]: http://dataprotocols.org/data-packages/
 
+[![NPM](https://nodei.co/npm/datapackage.png)](https://nodei.co/npm/datapackage/)
 
 Usage:
 ======
@@ -211,7 +211,7 @@ Combined with the --cache option, you get:
 
 You can also use ```dpm``` programaticaly.
 
-    var Dpm = require('dpm);
+    var Dpm = require('datapackage);
     var dpm = new Dpm(conf);
     
     dpm.install(['mydpkg@0.0.0', 'mydata@1.0.0'], {cache: true}, function(err, dpkgs){
@@ -227,7 +227,7 @@ See ```bin/dpm``` for examples
 
 
 ```dpm``` use the ```dataDependencies``` property of
-```package.json``` and store the dependencies in a ```data_modules/```
+```datapackage.json``` and store the dependencies in a ```datapackages/```
 directory so it can be used safely, without conflict as a
 [post-install script](https://npmjs.org/doc/misc/npm-scripts.html) of
 [npm](https://npmjs.org/).
@@ -249,5 +249,4 @@ http://github.com/okfn/dpm-old.
 
 Most relevant may be the documentation at:
 http://dpm.readthedocs.org/en/latest/
-
 
