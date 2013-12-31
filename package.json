@@ -1,7 +1,7 @@
 {
   "name": "datapackage",
   "version": "0.4.0",
-  "description": "Like npm but for data packages!",
+  "description": "Data package manager (dpm) library and command line tool",
   "main": "index.js",
   "bin": {
     "dpm": "bin/dpm"
