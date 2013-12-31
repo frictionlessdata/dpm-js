@@ -47,7 +47,9 @@ var argv = optimist
       '    - rm  <user> <datapackage name>[@<version>]',
       '      Remove a user from the data package maintainers'.grey,
       '  - search [search terms]',
-      '    Search data packages by keywords'.grey
+      '    Search data packages by keywords'.grey,
+      '  - help [command]',
+      '    Get help on command'.grey
     ].join(os.EOL)
   )
   .alias('f', 'force').describe('f', 'just do it')
@@ -343,7 +345,12 @@ if (argv._[0] === 'init') {
   
 } else if (argv._[0] === 'help'){
 
-  console.log(optimist.help());
+  var cmd = argv._[1];
+  if(cmd && ['init', 'cat', 'clone', 'get', 'install'].indexOf(cmd) !== -1){
+    console.log(fs.readFileSync(path.join(path.dirname(__dirname), 'doc', 'command-' + cmd + '.md'), 'utf8'));
+  } else {
+    console.log(optimist.help());
+  }
 
 } else {
 
