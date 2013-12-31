@@ -62,7 +62,6 @@
   },
   "devDependencies": {
     "mocha": "~1.15.1",
-    "nano": "~4.2.1",
     "lodash.difference": "~2.4.1"
   }
 }
