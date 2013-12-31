@@ -1,6 +1,6 @@
 {
   "name": "datapackage",
-  "version": "0.0.0",
+  "version": "0.4.0",
   "description": "Like npm but for data packages!",
   "main": "index.js",
   "bin": {
