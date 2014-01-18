@@ -79,7 +79,8 @@ if(argv._[0] !== 'cat'){
 
 if (argv._[0] === 'init') {
   dpinit.init(dpm.root, function(err, dpkg) {
-    console.log(dpkg);
+    var path_ = path.join(dpm.root, 'datapackage.json');
+    console.log('datapackage.json written to ' + path_);
   });
 } else if (argv._[0] === 'cat') {
   
