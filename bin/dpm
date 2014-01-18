@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var path = require('path')
-  , datapackage = require('datapackage-json')
+  , dpinit = require('datapackage-init')
   , util = require('util')
   , isUrl = require('is-url')
   , request = require('request')
@@ -24,7 +24,7 @@ var argv = optimist
   .usage(
     [
       'Usage: dpm <command> [options] where command is:',
-      '  - init [globs] [urls] [-d, --defaults] Interactively create a package.json file and add the files listed as globs (*.csv ... and urls) as resources',
+      '  - init <path>   Interactively create a package.json file in directory <path>',
       '  - cat       <datapackage name>[@<version>]',
       '    Display package.json on stdout. If @<version> is not specified, the latest version is returned.'.grey,
       '  - get      <datapackage name>[@<version>] [-f, --force] [-c, --cache]',
@@ -78,28 +78,9 @@ if(argv._[0] !== 'cat'){
 }
 
 if (argv._[0] === 'init') {
-
-  (function(){
-
-    var pkg = datapackage(dpm.root);
-
-    pkg.init({defaults: argv.defaults}, function(err, dpkg){
-      var inputs = argv._.slice(1);
-      dpm.paths2resources(inputs.filter(function(x){return !isUrl(x);}), function(err, resourcesFromPaths){
-        if(err) _fail(err);
-        dpm.urls2resources(inputs.filter(function(x){return isUrl(x);}), function(err, resourcesFromUrls){
-          if(err) _fail(err);
-          dpkg = dpm.addResources(dpkg, resourcesFromPaths.concat(resourcesFromUrls));
-
-          console.log(util.inspect(dpkg, {depth:null}));
-          pkg.write(dpkg);
-        });
-      });
-
-    });
-    
-  })();
-
+  dpinit.init(dpm.root, function(err, dpkg) {
+    console.log(dpkg);
+  });
 } else if (argv._[0] === 'cat') {
   
   (function(){

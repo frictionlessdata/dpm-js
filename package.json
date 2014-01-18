@@ -53,7 +53,7 @@
     "archy": "0.0.2",
     "flat": "~1.0.0",
     "fs-readdir-recursive": "0.0.1",
-    "datapackage-json": "0.0.5",
+    "datapackage-init": "",
     "glob": "~3.2.7",
     "lodash.uniq": "~2.4.1",
     "lodash.flatten": "~2.4.1",
