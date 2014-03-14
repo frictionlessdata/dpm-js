@@ -24,7 +24,9 @@ var argv = optimist
   .usage(
     [
       'Usage: dpm <command> [options] where command is:',
-      '  - init <path>   Interactively create a package.json file in directory <path>',
+      '',
+      '  - init <path>   Interactively create a datapackage.json file in directory <path>',
+      '  - validate <path>   Validate datapackage.json file in directory <path>',
       '  - cat       <datapackage name>[@<version>]',
       '    Display package.json on stdout. If @<version> is not specified, the latest version is returned.'.grey,
       '  - get      <datapackage name>[@<version>] [-f, --force] [-c, --cache]',
@@ -82,6 +84,12 @@ if (argv._[0] === 'init') {
     var path_ = path.join(dpm.root, 'datapackage.json');
     console.log('datapackage.json written to ' + path_);
   });
+} else if (argv._[0] === 'validate') {
+  if (argv._.length > 1) {
+    dpm.validate(argv._[1]);
+  } else {
+    dpm.validate(); 
+  }
 } else if (argv._[0] === 'cat') {
   
   (function(){
