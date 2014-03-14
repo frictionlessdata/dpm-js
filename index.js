@@ -23,12 +23,12 @@ var crypto = require('crypto')
   , jtsInfer = require('jts-infer');
 
 
-var Dpm = module.exports = function(rc, root){
+var Dpm = module.exports = function(config, root){
   EventEmitter.call(this);
 
   this.root = root || process.cwd();
 
-  this.rc = rc;
+  this.config = config;
 };
 
 util.inherits(Dpm, EventEmitter);
@@ -38,11 +38,11 @@ Dpm.prototype.publish = publish;
 
 //TODO: remove
 Dpm.prototype.url = function(path, queryObj){
-  return this.rc.protocol + '://'  + this.rc.hostname + ':' + this.rc.port + path + ( (queryObj) ? '?' + querystring.stringify(queryObj): '');
+  return this.config.protocol + '://'  + this.config.hostname + ':' + this.config.port + path + ( (queryObj) ? '?' + querystring.stringify(queryObj): '');
 };
 
 Dpm.prototype.auth = function(){
-  return {user: this.rc.name, pass: this.rc.password};
+  return {user: this.config.name, pass: this.config.password};
 };
 
 
@@ -462,20 +462,20 @@ Dpm.prototype.install = function(dpkgIds, opts, callback){
 
 Dpm.prototype.adduser = function(callback){
 
-  var rurl = this.url('/adduser/' + this.rc.name);
+  var rurl = this.url('/adduser/' + this.config.name);
   this.logHttp('PUT', rurl);
 
   var data = {
-    name: this.rc.name,
-    email: this.rc.email
+    name: this.config.name,
+    email: this.config.email
   };
 
-  if(this.rc.sha){
+  if(this.config.sha){
     var salt = crypto.randomBytes(30).toString('hex');
     data.salt = salt;
-    data.password_sha = crypto.createHash("sha1").update(this.rc.password + salt).digest("hex");
+    data.password_sha = crypto.createHash("sha1").update(this.config.password + salt).digest("hex");
   } else {
-    data.password = this.rc.password;
+    data.password = this.config.password;
   }
 
   request.put(this.rOptsAuth(rurl, {json: data}), function(err, res, body){
@@ -487,7 +487,7 @@ Dpm.prototype.adduser = function(callback){
     if(res.statusCode < 400){
       callback(null, body);
     } else if(res.statusCode === 409){
-      err = new Error('username ' + this.rc.name + ' already exists');
+      err = new Error('username ' + this.config.name + ' already exists');
       err.code = res.statusCode;
       callback(err, res.headers);
     } else {
