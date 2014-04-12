@@ -1,74 +1,41 @@
-dpm
-===
+# dpm = data package manager
 
-[Data package][dp] library and data package manager (dpm) command line tool.
+dpm is a library and command line manager for [Data Packages][dp].
 
 [dp]: http://dataprotocols.org/data-packages/
 
 [![NPM](https://nodei.co/npm/datapackage.png)](https://nodei.co/npm/datapackage/)
 
-Usage:
-======
+## Install
 
-##CLI
+`dpm` is implemented in node, so to install just do:
 
-    $ dpm --help
-    Usage: dpm <command> [options] where command is:
-      - init [globs (*.csv, ...)] [urls] [-d, --defaults]
-      - install   <datapackage name 1>[@<version>] <datapackage name 2>[@<version>] ... [-c, --cache] [-s, --save] [-f, --force]
-      - publish
-      - unpublish <datapackage name>[@<version>]
-      - search [search terms]
+    npm install dpm
 
+## Command Line Usage
 
-### Publishing and getting data packages
+To get a full overview check out the command line help:
 
-Given a [data package](http://dataprotocols.org/data-packages/):
+    dpm --help
 
-    $ cat datapackage.json
-    
-    {
-      "name": "mydpkg",
-      "description": "my datapackage",
-      "version": "0.0.0",
-      "keywords": ["test", "datapackage"],
-    
-      "resources": [
-        {
-          "name": "inline",
-          "schema": { "fields": [ {"name": "a", "type": "string"}, {"name": "b", "type": "integer"}, {"name": "c", "type": "number"} ] },
-          "data": [ {"a": "a", "b": 1, "c": 1.2}, {"a": "x", "b": 2, "c": 2.3}, {"a": "y", "b": 3, "c": 3.4} ]
-        },
-        {
-          "name": "csv1",
-          "format": "csv",
-          "schema": { "fields": [ {"name": "a", "type": "integer"}, {"name": "b", "type": "integer"} ] },
-          "path": "x1.csv"
-        },
-        {
-          "name": "csv2",
-          "format": "csv",
-          "schema": { "fields": [ {"name": "c", "type": "integer"}, {"name": "d", "type": "integer"} ] },
-          "path": "x2.csv"
-        }
-      ]
-    }
+### Initialize (Create) a Data Package
 
-stored on the disk as
+    dpm init [PATH]
 
-    $ tree
-    .
-    ├── datapackage.json
-    ├── scripts
-    │   └── test.r
-    ├── x1.csv
-    └── x2.csv
+For more see `doc/command-init.md` (or do `dpm help init`)
+
+### Installing Data Packages
 
 
+    dpm install [url]
 
-## Using dpm programaticaly
+For more see `doc/command-install.md` (or do `dpm help install`)
 
-You can also use ```dpm``` programaticaly.
+----
+
+## Using DPM programaticaly
+
+You can also use `dpm` programatically.
 
     var Dpm = require('datapackage);
     var dpm = new Dpm(conf);
@@ -78,12 +45,9 @@ You can also use ```dpm``` programaticaly.
     });
     dpm.on('log', console.log); //if you like stuff on stdout
 
+----
 
-See ```bin/dpm``` for examples
-
-
-References
-==========
+## References
 
 Previous `dpm` (python-based) can still be found at
 http://github.com/okfn/dpm-old.
