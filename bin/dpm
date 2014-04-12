@@ -51,7 +51,6 @@ var argv = optimist
     ].join(os.EOL)
   )
   .alias('f', 'force').describe('f', 'just do it')
-  .alias('d', 'defaults').describe('d', ' bypass the promzard prompt')
   .alias('s', 'save').describe('s', 'data packages will appear in your dataDependencies')
   .alias('c', 'cache').describe('c', 'store the resources content on the disk in a data/ directory')
   .alias('h', 'help').describe('h', 'print usage')
