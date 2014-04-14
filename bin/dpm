@@ -52,8 +52,8 @@ if(argv.v){
   process.exit(0);
 }
 
-//if cloudant: use sha:true
-var dpm = new Dpm(require('rc')('dpm', {protocol: 'https', port: 443, hostname: 'registry.standardanalytics.io', strictSSL: false, sha:true}), process.cwd());
+var conf = require('rc')('dpm', {}, process.cwd());
+var dpm = new Dpm(conf)
 
 if(argv._[0] !== 'cat'){
   dpm.on('log', console.log);
