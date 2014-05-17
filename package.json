@@ -55,6 +55,7 @@
     "fs-readdir-recursive": "0.0.1",
     "datapackage-init": "",
     "datapackage-validate": "",
+    "datapackage-read": "",
     "glob": "~3.2.7",
     "lodash.uniq": "~2.4.1",
     "lodash.flatten": "~2.4.1",
