@@ -7,10 +7,5 @@ object of the datapackage.json file of the current working directory.
 
 By default, each data package is installed in a directory (named after
 the data package "name" property) and located inside the datapackages
-directory. The installation of each data package corresponds to what
-is done by
+directory.
 
-    dpm get <datapackage name@version> [-c, --cache]
-
-The resource's data won't be retrieved unless the -c, --cache option
-is invoked.
