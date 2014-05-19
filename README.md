@@ -12,7 +12,7 @@ dpm is a library and command line manager for [Data Packages][dp].
 
 `dpm` is implemented in node, so to install `dpm` just do:
 
-    npm install datapackage
+    npm install datapackage -g
 
 ## Command Line Usage
 
