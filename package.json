@@ -1,6 +1,6 @@
 {
   "name": "datapackage",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Data package manager (dpm) library and command line tool",
   "main": "index.js",
   "bin": {
@@ -51,7 +51,7 @@
     "flat": "~1.0.0",
     "fs-readdir-recursive": "0.0.1",
     "datapackage-init": "",
-    "datapackage-validate": "",
+    "datapackage-validate": ">=0.2.2",
     "datapackage-read": "",
     "glob": "~3.2.7",
     "lodash.uniq": "~2.4.1",

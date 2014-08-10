@@ -58,6 +58,10 @@ You can also use `dpm` programatically.
 
 ----
 
+## Changelog
+
+* v0.6.0: much better validation via v0.2 of datapackage-validate
+
 ## References
 
 Previous `dpm` (python-based) can still be found at
