@@ -26,6 +26,15 @@ To get a full overview check out the command line help:
 
 For more see `doc/command-init.md` (or do `dpm help init`)
 
+### Validate a Data Package
+
+Check that a Data Package is valid (in particular, that its `datapackage.json`
+looks ok):
+
+    dpm validate [PATH]
+
+For more see `doc/command-validate.md` (or do `dpm help validate`)
+
 ### Installing Data Packages
 
 

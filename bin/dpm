@@ -80,7 +80,7 @@ if (argv._[0] === 'init') {
   });
 } else if (argv._[0] === 'help'){
   var cmd = argv._[1];
-  if(cmd && ['init', 'cat', 'clone', 'get', 'install'].indexOf(cmd) !== -1){
+  if(cmd && ['init', 'cat', 'clone', 'get', 'install', 'validate'].indexOf(cmd) !== -1){
     console.log(fs.readFileSync(path.join(path.dirname(__dirname), 'doc', 'command-' + cmd + '.md'), 'utf8'));
   } else {
     console.log(optimist.help());
