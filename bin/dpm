@@ -28,6 +28,8 @@ var argv = optimist
       '  init <path>      create a datapackage.json file in directory <path>',
       '  validate <path>  validate datapackage.json file in directory <path>',
       '  install  <url>   install a data packages into the current project along with its dependencies',
+      '  install  <url>   install a data packages into the current project along with its dependencies',
+      '  ckan     <url>   push a data package into a ckan instance',
       '  help <command>   Get help on command'
     ].join(os.EOL)
   )
@@ -74,18 +76,20 @@ if (argv._[0] === 'init') {
     if (err) _fail(err);
     else console.log(tree.deps(dpkgs));
   });
+} else if(argv._[0] === 'ckan'){
+  dpm.ckan(argv, function(err, msg) {
+    if (err) _fail(err);
+    else console.log(msg);
+  });
 } else if (argv._[0] === 'help'){
   var cmd = argv._[1];
-  if(cmd && ['init', 'cat', 'clone', 'get', 'install', 'validate'].indexOf(cmd) !== -1){
+  if(cmd && ['init', 'cat', 'clone', 'get', 'install', 'validate', 'ckan'].indexOf(cmd) !== -1){
     console.log(fs.readFileSync(path.join(path.dirname(__dirname), 'doc', 'command-' + cmd + '.md'), 'utf8'));
   } else {
     console.log(optimist.help());
   }
-
 } else {
-
   _fail(new Error('invalid command'));
-
 };
 
 function _fail(err){

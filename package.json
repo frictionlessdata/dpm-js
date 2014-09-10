@@ -53,6 +53,7 @@
     "datapackage-init": "",
     "datapackage-validate": ">=0.2.2",
     "datapackage-read": "",
+    "datapackage-ckan": "",
     "glob": "~3.2.7",
     "lodash.uniq": "~2.4.1",
     "lodash.flatten": "~2.4.1",
