@@ -60,6 +60,7 @@ You can also use `dpm` programatically.
 
 ## Changelog
 
+* v0.7.0: new ckan command
 * v0.6.0: much better validation via v0.2 of datapackage-validate
 
 ## References
