@@ -1,4 +1,7 @@
-Push the Data Package in the current directory into CKAN.
+dpm ckan {ckan-instance-url}
+
+Push the Data Package in the current directory into CKAN instance at
+{ckan-instance-url}.
 
 This will also import data from the Data Package resources into the DataStore
 (if of appropriate format i.e. CSVs).
