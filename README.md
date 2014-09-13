@@ -16,31 +16,9 @@ dpm is a library and command line manager for [Data Packages][dp].
 
 ## Command Line Usage
 
-To get a full overview check out the command line help:
+To get an overview and list of commands check out the command line help:
 
     dpm --help
-
-### Initialize (Create) a Data Package
-
-    dpm init [PATH]
-
-For more see `doc/command-init.md` (or do `dpm help init`)
-
-### Validate a Data Package
-
-Check that a Data Package is valid (in particular, that its `datapackage.json`
-looks ok):
-
-    dpm validate [PATH]
-
-For more see `doc/command-validate.md` (or do `dpm help validate`)
-
-### Installing Data Packages
-
-
-    dpm install [url]
-
-For more see `doc/command-install.md` (or do `dpm help install`)
 
 ----
 

@@ -1,10 +1,9 @@
-Initialize (create) a Data Package by creating a `datapackage.json` file.
+$0 init
 
-This utility will walk you through creating a Data Package package.json file.
+Initialize (create) a Data Package by creating a `datapackage.json` file in the
+current directory.
 
-It only covers the most common items, and tries to guess sane defaults.  See
+It only covers the most common items, and tries to guess sane defaults. See
 http://data.okfn.org/doc/data-package for definitive documentation on
-these fields, and exactly what they do.,
-
-Press ^C at any time to quit.
+these fields, and exactly what they do.
 

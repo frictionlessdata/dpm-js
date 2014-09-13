@@ -1,4 +1,6 @@
-Install a list of normalized data packages in a directory named
+$0 install {url}
+
+Install Data Package at {url} into subdirectory of current directory named
 "datapackages".
 
 The list of data packages to install either comes from stdin, or (if

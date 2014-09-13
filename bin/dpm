@@ -16,22 +16,18 @@ var path = require('path')
   , os = require('os')
   , colors = require('colors');
 
+
+function getHelpDoc(cmd) {
+  var fp = path.join(path.dirname(__dirname), 'doc', 'command-' + cmd + '.md')
+    , info = fs.readFileSync(fp, 'utf8')
+    ;
+  info = info.replace('$0', 'dpm');
+  return info;
+}
+
 var argv = optimist
   .usage(
-    [
-      'Usage:',
-      '',
-      '  $0 COMMAND ...',
-      '',
-      'where command is one of:',
-      '',
-      '  init <path>      create a datapackage.json file in directory <path>',
-      '  validate <path>  validate datapackage.json file in directory <path>',
-      '  install  <url>   install a data packages into the current project along with its dependencies',
-      '  install  <url>   install a data packages into the current project along with its dependencies',
-      '  ckan     <url>   push a data package into a ckan instance',
-      '  help <command>   Get help on command'
-    ].join(os.EOL)
+    getHelpDoc('help')
   )
   .alias('f', 'force').describe('f', 'just do it')
   .alias('s', 'save').describe('s', 'data packages will appear in your dataDependencies')
@@ -84,7 +80,7 @@ if (argv._[0] === 'init') {
 } else if (argv._[0] === 'help'){
   var cmd = argv._[1];
   if(cmd && ['init', 'cat', 'clone', 'get', 'install', 'validate', 'ckan', 'dpmrc'].indexOf(cmd) !== -1){
-    console.log(fs.readFileSync(path.join(path.dirname(__dirname), 'doc', 'command-' + cmd + '.md'), 'utf8'));
+    console.log(os.EOL + getHelpDoc(cmd));
   } else {
     console.log(optimist.help());
   }

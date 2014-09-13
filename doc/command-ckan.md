@@ -1,4 +1,4 @@
-dpm ckan {ckan-instance-url}
+$0 ckan {ckan-instance-url}
 
 Push the Data Package in the current directory into CKAN instance at
 {ckan-instance-url}.
