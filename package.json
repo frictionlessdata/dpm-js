@@ -1,6 +1,6 @@
 {
   "name": "datapackage",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "Data package manager (dpm) library and command line tool",
   "main": "index.js",
   "bin": {
@@ -42,6 +42,7 @@
     "read": "~1.0.5",
     "colors": "~0.6.2",
     "split": "~0.2.10",
+    "semver": "~2.2.1",
     "request": "~2.30.0",
     "rimraf": "~2.2.5",
     "mkdirp": "~0.3.5",
