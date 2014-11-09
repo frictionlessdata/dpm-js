@@ -48,3 +48,17 @@ describe('get', function() {
   });
 });
 
+describe('info', function() {
+  it('fixture', function(done) {
+    var ours = new dpm({}, root);
+    var argv = {
+      identifier: path.resolve('test/fixtures/mydpkg-test')
+    };
+    ours.info(argv, function(err, result) {
+      assert(!err, err);
+      assert.equal(result.json.name, 'mydpkg-test');
+      done();
+    });
+  });
+});
+

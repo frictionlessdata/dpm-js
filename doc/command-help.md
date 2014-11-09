@@ -3,6 +3,7 @@ Usage: dpm <command>
 where <command> is one of:
 
   init
+  info
   install
   validate
   ckan

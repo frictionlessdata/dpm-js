@@ -77,9 +77,16 @@ if (argv._[0] === 'init') {
     if (err) _fail(err);
     else console.log(msg);
   });
+} else if(argv._[0] === 'info'){
+  argv.identifier = argv._[1];
+  dpm.info(argv, function(err, info) {
+    if (err) _fail(err);
+    else console.log(info.plain);
+  });
 } else if (argv._[0] === 'help'){
   var cmd = argv._[1];
-  if(cmd && ['init', 'cat', 'clone', 'get', 'install', 'validate', 'ckan', 'dpmrc'].indexOf(cmd) !== -1){
+  if (cmd == 'ident') cmd = 'identifier'
+  if(cmd && ['init', 'cat', 'ckan', 'clone', 'dpmrc', 'get', 'info', 'install', 'identifier', 'validate'].indexOf(cmd) !== -1){
     console.log(os.EOL + getHelpDoc(cmd));
   } else {
     console.log(optimist.help());

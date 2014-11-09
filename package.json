@@ -1,7 +1,7 @@
 {
   "name": "datapackage",
-  "version": "0.7.5",
-  "description": "Data package manager (dpm) library and command line tool",
+  "version": "0.7.6",
+  "description": "Data Package manager (dpm) library and command line tool",
   "main": "index.js",
   "bin": {
     "dpm": "bin/dpm"
@@ -54,7 +54,7 @@
     "datapackage-init": "",
     "datapackage-validate": ">=0.2.2",
     "datapackage-read": ">=0.2.1",
-    "datapackage-spec": ">=0.2.0",
+    "datapackage-identifier": ">=0.3.0",
     "datapackage-ckan": ">=0.2.1",
     "glob": "~3.2.7",
     "lodash.uniq": "~2.4.1",
