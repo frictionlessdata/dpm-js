@@ -46,7 +46,3 @@ You can also use `dpm` programatically.
 
 Previous `dpm` (python-based) can still be found at
 http://github.com/okfn/dpm-old.
-
-Most relevant may be the documentation at:
-http://dpm.readthedocs.org/en/latest/
-
