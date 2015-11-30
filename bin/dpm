@@ -91,6 +91,9 @@ if (argv._[0] === 'init') {
   } else {
     console.log(optimist.help());
   }
+} else if (!argv._[0]){
+  console.log(optimist.help());
+  _fail(new Error('missing command'));  
 } else {
   _fail(new Error('invalid command'));
 };

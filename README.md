@@ -4,7 +4,8 @@ dpm is a library and command line manager for [Data Packages][dp].
 
 [dp]: http://dataprotocols.org/data-packages/
 
-[![NPM](https://nodei.co/npm/datapackage.png)](https://nodei.co/npm/datapackage/)
+[![NPM](https://nodei.co/npm/datapackage.png)](https://nodei.co/npm/datapackage/)  
+[![Build Status](https://travis-ci.org/okfn/dpm.svg?branch=master)](https://travis-ci.org/okfn/dpm)
 
 ## Install
 
@@ -45,7 +46,3 @@ You can also use `dpm` programatically.
 
 Previous `dpm` (python-based) can still be found at
 http://github.com/okfn/dpm-old.
-
-Most relevant may be the documentation at:
-http://dpm.readthedocs.org/en/latest/
-
