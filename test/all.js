@@ -74,17 +74,18 @@ describe('validate', function() {
     consoleLogSpy.restore();
   });
 
-  it('should return valid with a valid datapackage.json', function() {
+  it('should return valid with a valid datapackage.json', function(done) {
     var _dpm = new dpm({}, root);
     var _path = path.resolve('test/fixtures/mydpkg-test');
     return _dpm.validate(_path).then(function (results) {
       assert.equal(results.valid, true);
       assert.equal(results.errors.length, 0);
       assert.ok(consoleLogSpy.calledWith('DataPackage.json is Valid'.green));
+      done();
     });
   });
 
-  it('should return invalid with a invalid datapackage.json', function() {
+  it('should return invalid with a invalid datapackage.json', function(done) {
     var _dpm = new dpm({}, root);
     var _path = path.resolve('test/fixtures/mydpkg-invalid-test');
     var expectedResult = {
@@ -109,6 +110,7 @@ describe('validate', function() {
       assert.equal(results.errors.length, 1);
       assert.ok(consoleLogSpy.calledWith('DataPackage.json is Invalid'.red));
       assert.ok(consoleLogSpy.calledWith(JSON.stringify(expectedResult, null, 2)));
+      done();
     });
   });
 });
