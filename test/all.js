@@ -1,4 +1,6 @@
 var assert = require('assert')
+  , sinon = require('sinon')
+  , colors = require('colors')
   , path = require('path')
   , fs = require('fs')
   , rimraf = require('rimraf')
@@ -62,3 +64,53 @@ describe('info', function() {
   });
 });
 
+describe('validate', function() {
+  var consoleLogSpy;
+  beforeEach(function() {
+    consoleLogSpy = sinon.spy(console, 'log');
+  });
+
+  afterEach(function() {
+    consoleLogSpy.restore();
+  });
+
+  it('should return valid with a valid datapackage.json', function(done) {
+    var _dpm = new dpm({}, root);
+    var _path = path.resolve('test/fixtures/mydpkg-test');
+    return _dpm.validate(_path).then(function (results) {
+      assert.equal(results.valid, true);
+      assert.equal(results.errors.length, 0);
+      assert.ok(consoleLogSpy.calledWith('DataPackage.json is Valid'.green));
+      done();
+    });
+  });
+
+  it('should return invalid with a invalid datapackage.json', function(done) {
+    var _dpm = new dpm({}, root);
+    var _path = path.resolve('test/fixtures/mydpkg-invalid-test');
+    var expectedResult = {
+      "valid": false,
+      "errors": [
+        {
+          "message": "Missing required property: name",
+          "params": {
+            "key": "name"
+          },
+          "code": 302,
+          "dataPath": "",
+          "schemaPath": "/required/0",
+          "subErrors": null,
+          "type": "schema"
+        }
+      ]
+    };
+
+    return _dpm.validate(_path).then(function (results) {
+      assert.equal(results.valid, false);
+      assert.equal(results.errors.length, 1);
+      assert.ok(consoleLogSpy.calledWith('DataPackage.json is Invalid'.red));
+      assert.ok(consoleLogSpy.calledWith(JSON.stringify(expectedResult, null, 2)));
+      done();
+    });
+  });
+});
