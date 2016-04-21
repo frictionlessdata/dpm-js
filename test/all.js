@@ -51,8 +51,8 @@ describe('get', function() {
 
   it('should ignore data resource', function(done) {
     var ours = new dpm({}, root);
-    var url = 'https://github.com/waylonflinn/datapackage-example-inline';
-    var dpjson = path.join(root, 'datapackages', 'datapackage-example-inline', 'datapackage.json')
+    var url = 'https://github.com/okfn/dpm/tree/master/test/fixtures/datapackage-example-inline';
+    var dpjson = path.join(root, 'datapackages', 'datapackage-example-inline', 'datapackage.json');
 
     ours.get(url, function(err) {
       if (err) return done(err);
