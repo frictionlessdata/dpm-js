@@ -48,6 +48,20 @@ describe('get', function() {
       done();
     });
   });
+
+  it('should ignore data resource', function(done) {
+    var ours = new dpm({}, root);
+    var url = 'https://raw.githubusercontent.com/okfn/dpm/master/test/fixtures/datapackage-example-inline';
+    var dpjson = path.join(root, 'datapackages', 'datapackage-example-inline', 'datapackage.json');
+
+    ours.get(url, function(err) {
+      if (err) return done(err);
+
+      var dpkg = JSON.parse(fs.readFileSync(dpjson));
+      assert.equal(dpkg.name, 'datapackage-example-inline');
+      done();
+    });
+  });
 });
 
 describe('info', function() {

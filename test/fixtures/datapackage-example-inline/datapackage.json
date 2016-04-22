@@ -1,0 +1,10 @@
+{
+  "name" : "datapackage-example-inline",
+  "license" : "CC0",
+  "resources": [
+     {
+        "format": "csv",
+        "data": "A,B,C\n1,2,3\n4,5,6"
+     }
+   ]
+}
