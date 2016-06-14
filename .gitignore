@@ -9,9 +9,10 @@ lib-cov
 *.pid
 *.gz
 
-pids
-logs
-results
+pids/
+logs/
+results/
+node_modules/
+.idea/
 
 npm-debug.log
-node_modules

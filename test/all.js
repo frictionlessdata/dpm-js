@@ -4,7 +4,6 @@ var assert = require('assert')
   , path = require('path')
   , fs = require('fs')
   , rimraf = require('rimraf')
-
   , dpm = require('../lib/index')
   , util = require('../lib/util')
   ;
@@ -28,7 +27,7 @@ describe('get', function() {
       var dpkg = JSON.parse(fs.readFileSync(dpjson));
       var data = fs.readFileSync(datapath, 'utf8');
       assert.equal(dpkg.name, 'country-codes');
-      assert.equal(data.slice(0,12), 'name,name_fr');
+      assert.equal(data.slice(0,18), 'name,official_name');
       done();
     });
   });
@@ -44,7 +43,7 @@ describe('get', function() {
       var dpkg = JSON.parse(fs.readFileSync(dpjson));
       var data = fs.readFileSync(datapath, 'utf8');
       assert.equal(dpkg.name, 'country-codes');
-      assert.equal(data.slice(0,12), 'name,name_fr');
+      assert.equal(data.slice(0,18), 'name,official_name');
       done();
     });
   });
