@@ -1,6 +1,6 @@
 {
-  "name": "datapackage",
-  "version": "0.7.8",
+  "name": "dpmjs",
+  "version": "0.8.2",
   "description": "Data Package manager (dpm) library and command line tool",
   "main": "index.js",
   "bin": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/okfn/dpm.git"
+    "url": "git://github.com/frictionlessdata/dpm-js.git"
   },
   "keywords": [
     "hyperdata",
@@ -26,9 +26,9 @@
   "author": "Rufus Pollock (http://rufuspollock.org)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/okfn/dpm/issues"
+    "url": "https://github.com/frictionlessdata/dpm-js/issues"
   },
-  "homepage": "https://github.com/okfn/dpm",
+  "homepage": "https://github.com/frictionlessdata/dpm-js",
   "dependencies": {
     "temp": "~0.6.0",
     "fstream-ignore": "0.0.7",
