@@ -1,3 +1,17 @@
+<h1 style="text-align: center">
+  DEPRECATED and REPLACED - SEP 2017<br/>
+  <a href="https://datahub.io/docs/features/data-cli"><code>data</code></a> tool has replaced <code>dpm</code>
+  <br /></br>
+  <a href="https://datahub.io/docs/features/data-cli"><code>data</code> is our new command line tool</a> 
+  <br /><br />
+  https://datahub.io/docs/features/data-cli
+  <br /><br />
+  https://github.com/datahq/data-cli
+</h1>
+
+---
+---
+
 # Data Package Manager - in JavaScript
 
 [![NPM Package](https://nodei.co/npm/dpmjs.png)](https://nodei.co/npm/dpmjs/)
